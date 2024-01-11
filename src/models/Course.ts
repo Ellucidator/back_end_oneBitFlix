@@ -19,7 +19,7 @@ export interface CourseInstance
     extends Model<Course, CourseCreationAttributes>,
     Course { }
 
-export const Course = sequelize.define<CourseInstance, Course>("courses", {
+export const Course = sequelize.define<CourseInstance, Course>("Course", {
     id: {
         allowNull: false,
         autoIncrement: true,
@@ -48,4 +48,8 @@ export const Course = sequelize.define<CourseInstance, Course>("courses", {
         onUpdate: "CASCADE",
         onDelete: "RESTRICT",
     },
-});
+},
+{
+    tableName: "courses",
+}
+    );
