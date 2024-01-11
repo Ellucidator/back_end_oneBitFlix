@@ -3,7 +3,7 @@ import AdminJSExpress from "@adminjs/express";
 import AdminJSSequelize from "@adminjs/sequelize";
 import { sequelize } from "../database";
 import { adminJsResources } from "./resources";
-import { User } from "../models";
+import { Category, Course, Episode, User } from "../models";
 import bcrypt from "bcrypt";
 import { locale } from "./locale";
 
@@ -14,6 +14,22 @@ export const adminJs = new AdminJS({
     rootPath: "/admin",
     resources: adminJsResources,
     locale:locale,
+    dashboard: {
+        component: AdminJS.bundle('./components/Dashboard'),
+        handler: async (req,res,context) => {
+            const courses = await Course.count();
+            const episodes = await Episode.count();
+            const users = await User.count({where:{role:'user'}});
+            const categories = await Category.count();
+
+            res.json({
+                'Cursos': courses,
+                'Episodios': episodes,
+                'Usários': users,
+                'Categorias': categories
+            })
+        }
+    },
     branding: {
         companyName: "OneBitFlix",
         logo: "/logoOnebitflix.svg",
