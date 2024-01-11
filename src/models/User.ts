@@ -1,11 +1,12 @@
 import { Model, Optional } from "sequelize"
 import { sequelize } from "../database"
 import { DataTypes } from "sequelize"
+import bcrypt from "bcrypt"
 
 export interface User{
     id: number
-    first_name: string
-    last_name: string
+    firstName: string
+    lastName: string
     phone: string
     birth: Date
     email: string
@@ -24,11 +25,11 @@ export const User = sequelize.define<UserInstance, User>('User', {
         primaryKey: true,
         type: DataTypes.INTEGER
     },
-    first_name: {
+    firstName: {
         allowNull: false,
         type: DataTypes.STRING
     },
-    last_name: {
+    lastName: {
         allowNull: false,
         type: DataTypes.STRING
     },
@@ -43,7 +44,10 @@ export const User = sequelize.define<UserInstance, User>('User', {
     email: {
         allowNull: false,
         unique: true,
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        validate: {
+            isEmail: true,
+        }
     },
     password: {
         allowNull: false,
@@ -51,9 +55,20 @@ export const User = sequelize.define<UserInstance, User>('User', {
     },
     role: {
         allowNull: false,
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        validate: {
+            isIn: [['admin', 'user']],
+        },
+        defaultValue: 'user'
     }
 },
 {
-    tableName: 'users'
-})
+    tableName: 'users',
+    hooks: {
+        beforeSave: async (user) => {
+            if(user.isNewRecord||user.changed('password')){
+                user.password = await bcrypt.hash(user.password.toString(), 10)
+            }
+        }
+    }
+},)
