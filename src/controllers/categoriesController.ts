@@ -3,7 +3,7 @@
 import { Request, Response } from 'express'
 import { getPaginationParams } from '../helpers/getPaginationParams'
 import { categoryService } from '../services/categoryService'
-import { Category, Course } from '../models'
+import { Category} from '../models'
 
 const categoriesController = {
     index: async (req: Request, res: Response) => {
