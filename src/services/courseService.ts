@@ -3,7 +3,7 @@ import { Course } from "../models";
 
 export const courseService = {
 
-    async findByIdWithEpisodes(id:string) {
+    findByIdWithEpisodes:async(id:string) =>{
         const course = await Course.findByPk(id, {
             include: {
                 association:'episodes',
@@ -14,5 +14,18 @@ export const courseService = {
             attributes: ['id', 'name', 'synopsis']
         })
         return course
+    },
+
+    getRamdonFeaturedCourses:async():Promise<Course[]>=>{
+        const randomCourses = await Course.findAll({
+            where: {
+                featured: true
+            },
+            attributes:['id', 'name', 'synopsis', ['thumbnail_url','thumbnailUrl']]
+        })
+
+        const featuredRandomCourses = randomCourses.sort(()=> Math.random() - 0.5).slice(0,3)
+
+        return featuredRandomCourses
     }
 }

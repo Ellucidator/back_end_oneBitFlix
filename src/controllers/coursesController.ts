@@ -12,5 +12,16 @@ export const coursesController = {
                 return res.status(400).json({message: error.message})
             }
         }
+    },
+
+    featured:async(req:Request, res:Response) => {
+        try {
+            const courses = await courseService.getRamdonFeaturedCourses()
+            return res.json(courses)
+        } catch (error) {
+            if(error instanceof Error) {
+                return res.status(400).json({message: error.message})
+            }
+        }
     }
 }
