@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { userService } from "../services/userService";
 import bcrypt from 'bcrypt'
 import { jwtService } from "../services/jwtService";
+import { ensureAuth } from "../middlewares/auth";
 
 
 export const authController = {
