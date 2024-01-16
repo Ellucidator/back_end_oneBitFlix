@@ -25,3 +25,21 @@ export  function ensureAuth(req:AuthenticadedRequest,res:Response,next:NextFunct
     })
 
 }
+
+export function ensureAuthViaQuery(req:AuthenticadedRequest,res:Response,next:NextFunction) {
+
+    const {token} = req.query
+    if(!token) return res.status(401).json({message: 'Token not found'})
+    if(typeof token !== 'string') return res.status(401).json({message: 'Parameter token must be a string'})
+
+    jwtService.verifyToken(token, (err, decoded) => {
+        if(err || typeof decoded === 'undefined') return res.status(401).json({message: 'Invalid token'})
+
+        userService.findByEmail((decoded as JwtPayload).email).then(user => {
+            req.user = user
+            next()
+        })
+    })
+
+
+    }
