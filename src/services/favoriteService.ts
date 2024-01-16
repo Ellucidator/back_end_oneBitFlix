@@ -16,5 +16,10 @@ export const favoriteService = {
             userId,
             courses: favorites.map(favorite => favorite.Course)
         }
+    },
+    delete: async (userId: number|string, courseId: number|string) => {
+        const userIdNumber = typeof userId === 'string' ? parseInt(userId, 10) : userId
+        const courseIdNumber = typeof courseId === 'string' ? parseInt(courseId, 10) : courseId
+        await Favorite.destroy({where: {userId: userIdNumber, courseId: courseIdNumber}})
     }
 }

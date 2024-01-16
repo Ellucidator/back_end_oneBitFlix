@@ -23,6 +23,7 @@ router.get('/episodes/stream',ensureAuthViaQuery,episodesControler.stream)
 
 router.post('/favorites',ensureAuth,favoritesController.save)
 router.get('/favorites',ensureAuth,favoritesController.index)
+router.delete('/favorites',ensureAuth,favoritesController.delete)
 
 
 
