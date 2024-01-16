@@ -8,5 +8,13 @@ export const favoriteService = {
         const favorite = await Favorite.create({userId: userIdNumber, courseId: courseIdNumber})
         return favorite
         
+    },
+    findByUserId: async (userId: number|string) => {
+        const userIdNumber = typeof userId === 'string' ? parseInt(userId, 10) : userId
+        const favorites = await Favorite.findAll({where: {userId: userIdNumber},attributes:['userId','courseId'],include:{association:'Course', attributes:['id','name','synopsis',['thumbnail_url','thumbnailUrl']]}},)
+        return {
+            userId,
+            courses: favorites.map(favorite => favorite.Course)
+        }
     }
 }
