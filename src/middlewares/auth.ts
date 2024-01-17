@@ -14,7 +14,7 @@ export  function ensureAuth(req:AuthenticadedRequest,res:Response,next:NextFunct
 
     if(!tokenAuthorization) return res.status(401).json({message: 'Token not found'})
     const token = tokenAuthorization.replace(/Bearer /, '')
-    console.log(token)
+
     jwtService.verifyToken(token, (err, decoded) => {
         if(err || typeof decoded === 'undefined') return res.status(401).json({message: 'Invalid token'})
 
