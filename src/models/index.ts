@@ -22,9 +22,6 @@ User.hasMany(Like, {as:'LikesCourses', foreignKey:'user_id'})
 Favorite.belongsTo(Course)
 Favorite.belongsTo(User)
 
-Like.belongsTo(User)
-Like.belongsTo(Course)
-
 Episode.belongsTo(Course)
 
 
