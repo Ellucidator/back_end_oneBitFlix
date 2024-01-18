@@ -21,5 +21,14 @@ export const favoriteService = {
         const userIdNumber = typeof userId === 'string' ? parseInt(userId, 10) : userId
         const courseIdNumber = typeof courseId === 'string' ? parseInt(courseId, 10) : courseId
         await Favorite.destroy({where: {userId: userIdNumber, courseId: courseIdNumber}})
+    },
+
+    isFavorite: async (userId: number|string, courseId: number|string) => {
+
+        const userIdNumber = typeof userId === 'string' ? parseInt(userId, 10) : userId
+        const courseIdNumber = typeof courseId === 'string' ? parseInt(courseId, 10) : courseId
+        
+        const favorite = await Favorite.findOne({where: {userId: userIdNumber, courseId: courseIdNumber}})
+        return favorite?true:false
     }
 }

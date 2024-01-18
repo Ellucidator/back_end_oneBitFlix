@@ -3,6 +3,7 @@ import { courseService } from "../services/courseService";
 import { getPaginationParams } from "../helpers/getPaginationParams";
 import { AuthenticadedRequest } from "../middlewares/auth";
 import { likeService } from "../services/likeService";
+import { favoriteService } from "../services/favoriteService";
 
 export const coursesController = {
     show: async (req:AuthenticadedRequest, res:Response) => {
@@ -11,11 +12,11 @@ export const coursesController = {
             const courseId = req.params.id
 
             const course = await courseService.findByIdWithEpisodes(courseId)
-            console.log(course)
             if(course){
                 const liked = await likeService.isLiked(userId, courseId)
+                const favorited = await favoriteService.isFavorite(userId, courseId)
 
-                return res.json({...course.get(), liked})
+                return res.json({...course.get(), liked, favorited})
             }
             
         } catch (error) {
