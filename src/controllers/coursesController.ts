@@ -1,14 +1,23 @@
 import { Request, Response } from "express";
 import { courseService } from "../services/courseService";
-import { throws } from "assert";
 import { getPaginationParams } from "../helpers/getPaginationParams";
+import { AuthenticadedRequest } from "../middlewares/auth";
+import { likeService } from "../services/likeService";
 
 export const coursesController = {
-    show: async (req:Request, res:Response) => {
+    show: async (req:AuthenticadedRequest, res:Response) => {
+        const userId = req.user!.id
         try {
-            const { id } = req.params
-            const course = await courseService.findByIdWithEpisodes(id)
-            return res.json(course)
+            const courseId = req.params.id
+
+            const course = await courseService.findByIdWithEpisodes(courseId)
+            console.log(course)
+            if(course){
+                const liked = await likeService.isLiked(userId, courseId)
+
+                return res.json({...course.get(), liked})
+            }
+            
         } catch (error) {
             if(error instanceof Error) {
                 return res.status(400).json({message: error.message})

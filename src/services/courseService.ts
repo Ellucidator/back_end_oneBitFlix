@@ -4,8 +4,8 @@ import { Course } from "../models";
 
 export const courseService = {
 
-    findByIdWithEpisodes:async(id:string) =>{
-        const course = await Course.findByPk(id, {
+    findByIdWithEpisodes:async(courseId:number|string) =>{
+        const course = await Course.findByPk(courseId, {
             include: {
                 association:'episodes',
                 attributes: ['id', 'name', 'synopsis',['video_url','videoUrl'],['seconds_long','secondsLong']],
