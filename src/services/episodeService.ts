@@ -1,6 +1,7 @@
 import { Response } from "express";
 import fs from "fs";
 import path from "path";
+import { WatchTime } from "../models";
 
 
 export const episodeService = {
@@ -36,5 +37,13 @@ export const episodeService = {
             fs.createReadStream(filePath).pipe(res)
         }
 
+    },
+
+    getWatchTime: async (userId: number, episodeId: number) => {
+        const watchTime = await WatchTime.findOne({
+            where: { userId: userId, episodeId: episodeId },
+            attributes: ['seconds']
+        })
+        return watchTime
     }
 }

@@ -11,7 +11,7 @@ export interface WatchTime{
 export interface WatchTimeInstance extends Model<WatchTime>, WatchTime {}
 
 
-const WatchTime = sequelize.define<WatchTimeInstance, WatchTime>('WatchTime', {
+export const WatchTime = sequelize.define<WatchTimeInstance, WatchTime>('WatchTime', {
     seconds: {
         allowNull: false,
         type: DataTypes.INTEGER,
