@@ -2,48 +2,70 @@ import { Response } from "express";
 import fs from "fs";
 import path from "path";
 import { WatchTime } from "../models";
-
+import { WatchTime as WatchTimeAtributes } from "../models/WatchTime";
 
 export const episodeService = {
-    streamEpisodeToResponse(res: Response, videoUrl: string, range: string | undefined) {
-
-        const filePath = path.join(__dirname, '..', '..', 'uploads', videoUrl.toString())
-        const fileStat = fs.statSync(filePath)
+    streamEpisodeToResponse(
+        res: Response,
+        videoUrl: string,
+        range: string | undefined
+    ) {
+        const filePath = path.join(
+            __dirname,
+            "..",
+            "..",
+            "uploads",
+            videoUrl.toString()
+        );
+        const fileStat = fs.statSync(filePath);
 
         if (range) {
-            const parts = range.replace(/bytes=/, "").split("-")
+            const parts = range.replace(/bytes=/, "").split("-");
 
-            const start = parseInt(parts[0], 10)
-            const end = parts[1] ? parseInt(parts[1], 10) : fileStat.size - 1
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : fileStat.size - 1;
 
-            const chunksize = (end - start) + 1
-            const file = fs.createReadStream(filePath, { start, end })
+            const chunksize = end - start + 1;
+            const file = fs.createReadStream(filePath, { start, end });
 
             const head = {
                 "Content-Range": `bytes ${start}-${end}/${fileStat.size}`,
                 "Accept-Ranges": "bytes",
                 "Content-Length": chunksize,
-                "Content-Type": "video/mp4"
-            }
-            res.writeHead(206, head)
+                "Content-Type": "video/mp4",
+            };
+            res.writeHead(206, head);
 
-            file.pipe(res)
+            file.pipe(res);
         } else {
             const head = {
                 "Content-Length": fileStat.size,
-                "Content-Type": "video/mp4"
-            }
-            res.writeHead(200, head)
-            fs.createReadStream(filePath).pipe(res)
+                "Content-Type": "video/mp4",
+            };
+            res.writeHead(200, head);
+            fs.createReadStream(filePath).pipe(res);
         }
-
     },
 
-    getWatchTime: async (userId: number, episodeId: number) => {
+    getWatchTime: async (userId: number|string, episodeId: number|string) => {
         const watchTime = await WatchTime.findOne({
             where: { userId: userId, episodeId: episodeId },
-            attributes: ['seconds']
-        })
-        return watchTime
-    }
-}
+            attributes: ["seconds"],
+        });
+        return watchTime;
+    },
+
+    setWatchTime: async ({ userId, episodeId, seconds }: WatchTimeAtributes) => {
+        const watchTimeAlreadyExists = await WatchTime.findOne({
+            where: { userId, episodeId },
+        });
+
+        if (watchTimeAlreadyExists) {
+            await watchTimeAlreadyExists.update({ seconds });
+            return watchTimeAlreadyExists;
+        } else {
+            const watchTime = await WatchTime.create({ userId, episodeId, seconds });
+            return watchTime;
+        }
+    },
+};
