@@ -3,7 +3,6 @@ import { jwtService } from "../services/jwtService";
 import { userService } from "../services/userService";
 import { JwtPayload } from "jsonwebtoken";
 import { UserInstance } from "../models/User";
-import jwt from 'jsonwebtoken'
 
 export interface AuthenticadedRequest extends Request {
     user?: UserInstance|null

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import {  Response } from "express";
 import { AuthenticadedRequest } from "../middlewares/auth";
 import { favoriteService } from "../services/favoriteService";
 
