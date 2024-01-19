@@ -11,7 +11,7 @@ Course.belongsTo(Category)
 Course.hasMany(Episode, {as:'episodes'})
 Course.belongsToMany(User, {through:Favorite, foreignKey:'course_id'})
 Course.hasMany(Favorite, {as:'FavoritesUsers', foreignKey:'course_id'})
-Course.belongsToMany(User, {through: Like})
+Course.belongsToMany(User, {through: Like, as:'userslike'})
 
 User.belongsToMany(Course, {through:Favorite, foreignKey:'user_id'})
 User.hasMany(Favorite, {as:'FavoritesCourses', foreignKey:'user_id'})
