@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { episodeService } from "../services/episodeService";
 import { AuthenticadedRequest } from "../middlewares/auth";
+import { userService } from "../services/userService";
 
 
 
@@ -45,6 +46,18 @@ export const episodesControler = {
         const {seconds} = req.body
         try {
             const watchTime = await episodeService.setWatchTime({userId, episodeId: Number(episodeId), seconds: Number(seconds)})
+            return res.json(watchTime)
+        } catch (error) {
+            if(error instanceof Error) {
+                return res.status(400).json({message: error.message})
+            }
+        }
+    },
+
+    userListWatchTime:async(req:AuthenticadedRequest, res:Response)=>{
+        const userId = req.user!.id
+        try {
+            const watchTime = await userService.watchingList(userId)
             return res.json(watchTime)
         } catch (error) {
             if(error instanceof Error) {
