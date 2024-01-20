@@ -26,7 +26,7 @@ export const userService = {
                     through:{
                         as:'watchTime',
                         attributes:['seconds']
-                    }
+                    },
                 }
             ,
             attributes:['id','firstName']
@@ -35,4 +35,5 @@ export const userService = {
 
         return watchingListUser
     }
+
 }
