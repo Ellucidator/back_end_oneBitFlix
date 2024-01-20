@@ -35,6 +35,7 @@ router.post('/likes',ensureAuth,likesController.save)
 router.delete('/likes',ensureAuth,likesController.delete)
 
 router.get('/account',ensureAuth,userController.show)
+router.put('/account',ensureAuth,userController.update)
 
 
 
