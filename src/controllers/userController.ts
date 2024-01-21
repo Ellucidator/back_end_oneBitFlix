@@ -29,5 +29,23 @@ export const userController = {
                 return res.status(400).json({message: error.message})
             }
         }
+    },
+
+    updatePassword:async(req:AuthenticadedRequest,res:Response)=>{
+        const user = req.user
+        const {currentPassword, newPassword} = req.body
+        try {
+            user?.checkPassword(currentPassword,async (err, isSame) => {
+                if (err) throw new Error(err.message)
+                if (!isSame) throw new Error('Current password invalid')
+                
+                await userService.updatePassword(user!.id, newPassword)
+                return res.status(200).json({message: 'Password updated'})
+            })
+        } catch (error) {
+            if(error instanceof Error) {
+                return res.status(400).json({message: error.message})
+            }
+        }
     }
 }
