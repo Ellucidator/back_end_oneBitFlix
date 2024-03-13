@@ -10,7 +10,14 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(adminJs.options.rootPath,adminJsRouter);
 app.use(router);
-app.use(cors());
+app.use(cors({
+    origin: true,
+    credentials: true,
+    exposedHeaders: ['Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+
+}));
+
 
 const PORT = process.env.PORT || 3000;
 

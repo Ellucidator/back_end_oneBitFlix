@@ -28,8 +28,8 @@ export const authController = {
             if (!user) throw new Error('Email not found')
 
             user.checkPassword(password, (err, isSame) => {
-                if (err) throw new Error(err.message)
-                if (!isSame) throw new Error('Password invalid')
+                if (err) return res.status(400).json({ message: err.message })
+                if (!isSame)return res.status(400).json({ 'message': 'Invalid password' })
 
                 const payload = {
                     id: user.id,

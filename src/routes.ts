@@ -10,7 +10,7 @@ import { userController } from './controllers/userController'
 
 const router = express.Router()
 
-router.post('/auth/register',authController.register)
+router.post('/auth/register',authController.register,)
 router.post('/auth/login',authController.login)
 
 router.get('/categories', ensureAuth ,categoriesController.index)
